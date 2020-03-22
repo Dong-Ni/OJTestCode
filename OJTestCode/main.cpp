@@ -6,19 +6,9 @@
 #include <string>
 #include <regex>
 #include <stack>
+#include <unordered_map>
 
 using namespace std;
-
-//#include <iostream>
-//#include <vector>
-//#include <algorithm>
-//#include <string>
-//
-//using namespace std;
-//int main()
-//{
-//	return 0;
-//}
 
 //1.两数之和
 //给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。
@@ -1348,129 +1338,61 @@ void CheckSecret()
 	}
 }
 
+//945. 使数组唯一的最小增量
+//给定整数数组 A，每次 move 操作将会选择任意 A[i]，并将其递增 1。
+//返回使 A 中的每个值都是唯一的最少操作次数。
+//输入：[1, 2, 2]
+//输出：1
+//解释：经过一次 move 操作，数组将变为[1, 2, 3]。
+//输入：[3, 2, 1, 2, 1, 7]
+//输出：6
+//解释：经过 6 次 move 操作，数组将变为[3, 4, 1, 2, 5, 7]。
+int minIncrementForUnique(vector<int>& A) {
+	int mapUnique[80000] = { 0 };
+	for (auto it : A) mapUnique[it]++;
+	int nRet = 0;
+	int nToken = 0;
+	for (int it = 0; it < 80000; ++it)
+	{
+		if (mapUnique[it]>= 2)
+		{
+			nToken += mapUnique[it] - 1;
+			nRet -= it * (mapUnique[it] - 1);
+		}
+		else if (nToken > 0 && mapUnique[it] == 0)
+		{
+			nToken--;
+			nRet += it;
+		}
+	}
+	return nRet;
+}
+//解法2 eg 5 5 5 6
+int minIncrementForUnique2(vector<int>& A) {
+	sort(A.begin(), A.end());
+	int nRet = 0;
+	for (int it = 1; it < A.size(); ++it)
+	{
+		if (A[it] <= A[it - 1])
+		{
+			nRet += A[it - 1] - A[it] + 1;
+			A[it] = A[it - 1] + 1;
+		}
+	}
+
+	return nRet;
+}
+
 int main()
 {
 
-	//vector<int> nums = { 2, 7, 11, 15 };
-	//int target = 9;
-	//vector<int> rets;
-	//rets = twoSum(nums, target);
+	vector<int> vecArr1 = { 1, 2, 2 };
+	int nRet1 = minIncrementForUnique(vecArr1);
+	vector<int> vecArr2 = { 3, 2, 1, 2, 1, 7 };
+	int nRet2 = minIncrementForUnique(vecArr2);
 
-	//string strLongestPalindrome = "cbdedbc";
-	//string strLongestPalindrome = "dd";
-	//string outStr = longestPalindrome(strLongestPalindrome);
-
-	//string strConvert = "A";
-	//outStr = convert(strConvert, 1);
-
-	//string strInput;
-	//map<char, int> mapCharInt;
-	//getline(cin, strInput);
-
-	//nNums(strInput, mapCharInt);
-
-	//char chrInput;
-	//cin >> chrInput;
-	//cout << mapCharInt[tolower(chrInput)] << endl;
-
-	//int nInputNums = 0;
-	//vector<int> vecIntNums;
-	//while (cin >> nInputNums)
-	//{
-	//	vecIntNums.clear();
-	//	while (nInputNums--)
-	//	{
-	//		int nInputRealNum;
-	//		cin >> nInputRealNum;
-
-	//		vecIntNums.emplace_back(nInputRealNum);
-	//	}
-	//	SortAndRemoveSmae(vecIntNums);
-
-	//	for (auto it : vecIntNums)
-	//	{
-	//		cout << it << endl;
-	//	}
-	//}
-
-	//string strInput;
-	//while (cin >> strInput)
-	//{
-	//	vector<string> vecRet = SplitString(strInput);
-	//	for (auto it : vecRet)
-	//	{
-	//		cout << it << endl;
-	//	}
-	//}
-
-	//string strInput;
-	//while (getline(cin, strInput))
-	//{
-	//	cout << NumsInACSII(strInput) << endl;
-	//}
-
-
-	//vector<int> vecInput1;
-	//vector<int> vecInput2;
-	//for (int i = 0; i < 4; ++i)
-	//{
-	//	int nTmp;
-	//	cin >> nTmp;
-	//	vecInput1.emplace_back(nTmp);
-	//}
-
-	//for (int i = 0; i < 4; ++i)
-	//{
-	//	int nTmp2;
-	//	cin >> nTmp2;
-	//	vecInput2.emplace_back(nTmp2);
-	//}
-
-	//cout << SameAAndB(vecInput1, vecInput2) << endl;
-
-	//int nRet = lengthOfLastWord("hello world everyaa!");
-	//int nRet2 = lengthOfLastWord("eve  hello   ");
-	//int nRet3 = lengthOfLastWord("");
-	//int nRet4 = lengthOfLastWord("   ");
-
-	//vector<int> nums = {5, 1, 3};
-	//int nRet = search(nums, 5);
-
-	//vector<vector<int>> nums = { {1, 2, 3, 4},{5, 6, 7, 8},{9, 10, 11, 12} };
-	//spiralOrder(nums);
-
-	//string strInput;
-	//cin >> strInput;
-	//cout << calcBigalhaNums(strInput);
-
-	//int nInput;
-	//cin >> nInput;
-	//cout << Int2Str(nInput);
-	//char a = 'a';
-	//char A = 'A';
-	////cin >> A >> a;
-	//int ret = A - a;
-	//vector<string> vecStr;
-	//string strInput;
-	//while (cin >> strInput)
-	//{
-	//	vecStr.push_back(strInput);
-	//}
-
-	//string strRet;
-	//string strRetTmp;
-	//for (int i = 0; i < vecStr.size(); ++i)
-	//{
-	//	strRetTmp = str2MaxStr(vecStr[i]);
-	//	if (strRetTmp.size() > strRet.size())
-	//	{
-	//		strRet = strRetTmp;
-	//	}
-	//}		
-	//cout << strRet << endl;
-
-	bool bRet1 = isScramble("great", "rgeat");
-    bool bRet2 = isScramble("abcde", "caebd");
-
+	vector<int> vecArr3 = { 5,5,5,6 };
+	int nRet3 = minIncrementForUnique2(vecArr3);
+	system("pause");
 	return 0;
 }

@@ -287,7 +287,29 @@ int maxArea(vector<int>& height) {
 
 	return nMaxRet;
 }
+//上面解法 两个for循环 执行会超时
+//双指针法
+int maxArea2(vector<int>& height) {
+	int nMaxRet = 0;
+	int nLeft = 0;
+	int nRight = height.size() - 1;
+	while (nLeft < nRight)
+	{
+		int nTmp = (nRight - nLeft) * min(height[nLeft], height[nRight]);
+		nMaxRet = nMaxRet > nTmp ? nMaxRet : nTmp;
 
+		if (height[nLeft] <= height[nRight])
+		{
+			nLeft++;
+		}
+		else
+		{
+			nRight--;
+		}
+	}
+
+	return nMaxRet;
+}
 
 //写出一个程序，接受一个由字母和数字组成的字符串，和一个字符，然后输出输入字符串中含有该字符的个数。不区分大小写。
 void nNums(string strInput, map<char, int>& mapCharInt)
@@ -1381,6 +1403,35 @@ int minIncrementForUnique2(vector<int>& A) {
 	}
 
 	return nRet;
+}
+struct TreeNode {
+	int val;
+	TreeNode* left;
+	TreeNode* right;
+	TreeNode(int x) : val(x), left(NULL), right(NULL) {}	
+};
+
+//110. 平衡二叉树
+//给定一个二叉树，判断它是否是高度平衡的二叉树。
+//本题中，一棵高度平衡二叉树定义为：
+//一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过1。
+int DFSNums(TreeNode* root)
+{
+	if (NULL == root) return 0;
+
+	int nDepthLeft = DFSNums(root->left);
+	int nDepthRight = DFSNums(root->right);
+
+
+	return max(nDepthLeft, nDepthRight) + 1;
+}
+
+bool isBalanced(TreeNode* root) {
+	
+	int nLeft = DFSNums(root->left);
+	int nRight = DFSNums(root->right);
+
+	return abs(nLeft-nRight) <= 1 && isBalanced(root->left) && isBalanced(root->right);
 }
 
 int main()

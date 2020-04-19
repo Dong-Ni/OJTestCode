@@ -7,6 +7,7 @@
 #include <regex>
 #include <stack>
 #include <unordered_map>
+#include <queue>
 
 using namespace std;
 
@@ -1432,6 +1433,49 @@ bool isBalanced(TreeNode* root) {
 	int nRight = DFSNums(root->right);
 
 	return abs(nLeft-nRight) <= 1 && isBalanced(root->left) && isBalanced(root->right);
+}
+
+//111. 二叉树的最小深度 easy
+//给定一个二叉树，找出其最小深度。
+//最小深度是从根节点到最近叶子节点的最短路径上的节点数量。
+//说明 : 叶子节点是指没有子节点的节点。
+int minDepth(TreeNode* root) {
+	if (NULL == root) return 0;
+
+	queue<TreeNode*> queTree;
+	queTree.push(root);
+	int nDepth = 1;
+	int nTimes = 1;
+	while (!queTree.empty())
+	{
+		while (nTimes > 0)
+		{
+			TreeNode* tmp = queTree.front();
+			queTree.pop();
+
+			if(NULL != tmp->left) queTree.push(tmp->left);
+			if(NULL != tmp->right) queTree.push(tmp->right);
+			if (NULL == tmp->left && NULL == tmp->right) return nDepth;
+			nTimes--;
+		}
+
+		nTimes = queTree.size();
+		nDepth++;
+	}
+
+	return nDepth;
+}
+//利用递归实现最小深度
+int minDepthDFS(TreeNode* root)
+{
+	if (NULL == root) return 0;
+	if (NULL == root->left || NULL == root->right) return 1;
+
+	int nMin = INT_MAX;
+	if(NULL != root->left) nMin = min(nMin,minDepthDFS(root->left));
+	if (NULL != root->right) nMin = min(nMin, minDepthDFS(root->right));
+
+	return nMin + 1;
 }
 
 int main()

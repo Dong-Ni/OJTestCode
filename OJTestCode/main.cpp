@@ -1478,16 +1478,72 @@ int minDepthDFS(TreeNode* root)
 	return nMin + 1;
 }
 
+//46. 全排列 mid
+//给定一个 没有重复 数字的序列，返回其所有可能的全排列。
+void vecPermuteDFS(vector<int>& rem, vector<int>& cur, vector<vector<int>>& vecVecRet)
+{
+	if (rem.empty())
+	{
+		vecVecRet.push_back(cur);
+		return;
+	}
+
+	for (int it = 0 ; it < rem.size(); ++it)
+	{
+		cur.push_back(rem[it]);
+		vector<int> vecTmp = rem;
+		vecTmp.erase(vecTmp.begin() + it);
+		vecPermuteDFS(vecTmp, cur, vecVecRet);
+		cur.pop_back();
+	}
+}
+vector<vector<int>> permute(vector<int>& nums) {
+	vector<vector<int>> vecVecRet;
+	vector<int> vecTmp;
+	vecPermuteDFS(nums, vecTmp, vecVecRet);
+	return vecVecRet;
+}
+
+//120. 三角形最小路径和 mid
+//给定一个三角形，找出自顶向下的最小路径和。每一步只能移动到下一行中相邻的结点上。
+int minimumTotal(vector<vector<int>>& triangle) {
+	if (triangle.empty() || triangle[0].empty()) return 0;
+
+	queue<int> quePathTotal;
+	queue<int> queLastIndex;
+	queLastIndex.push(0);
+	quePathTotal.push(triangle[0][0]);
+	int nMin = triangle[0][0];
+	for (int i = 1; i < triangle.size(); i++)  //行
+	{
+		int nTimes = quePathTotal.size();
+		nMin = INT_MAX;
+		while(nTimes > 0)
+		{
+			int nTmp = quePathTotal.front();
+			quePathTotal.pop();
+			int nIndex = queLastIndex.front();
+			queLastIndex.pop();
+			//每个值有两种可能
+			int nCur = nTmp + triangle[i][nIndex];
+			quePathTotal.push(nCur);
+			queLastIndex.push(nIndex);
+			nMin = min(nMin, nCur);
+			nCur = nTmp + triangle[i][nIndex + 1];
+			quePathTotal.push(nCur);
+			queLastIndex.push(nIndex + 1);
+			nMin = min(nMin, nCur);
+			nTimes--;
+		}
+	}
+
+	return nMin;
+}
 int main()
 {
+	vector<vector<int>>  vecVecInput1 = {{2}, {3,4}, {6,5,7}, {4,1,8,3}};
+	int nRet1 = minimumTotal(vecVecInput1);
 
-	vector<int> vecArr1 = { 1, 2, 2 };
-	int nRet1 = minIncrementForUnique(vecArr1);
-	vector<int> vecArr2 = { 3, 2, 1, 2, 1, 7 };
-	int nRet2 = minIncrementForUnique(vecArr2);
-
-	vector<int> vecArr3 = { 5,5,5,6 };
-	int nRet3 = minIncrementForUnique2(vecArr3);
 	system("pause");
 	return 0;
 }

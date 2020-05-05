@@ -1539,6 +1539,49 @@ int minimumTotal(vector<vector<int>>& triangle) {
 
 	return nMin;
 }
+
+//重载 + - 运算
+//string operator+ (const string& str)
+//{
+//	string strRet(str);
+//	strRet.append("hello.");
+//	return str;
+//}
+//
+//string operator-(const string& str)
+//{
+//	string strRet(str);
+//	strRet.append("hello.");
+//	return str;
+//}
+
+//98. 验证二叉搜索树
+//给定一个二叉树，判断其是否是一个有效的二叉搜索树。
+//假设一个二叉搜索树具有如下特征：
+//节点的左子树只包含小于当前节点的数。
+//节点的右子树只包含大于当前节点的数。
+//所有左子树和右子树自身必须也是二叉搜索树。
+bool isValidBST(TreeNode* root) {
+
+	stack<TreeNode*> stackNode;
+	long long nCurNum = (long long)INT_MIN - 1;
+	while (!stackNode.empty() || root != NULL)
+	{
+		while (root != NULL)
+		{
+			stackNode.push(root);
+			root = root->left;
+		}
+
+		root = stackNode.top();
+		stackNode.pop();
+		if (root->val <= nCurNum) return false;
+
+		nCurNum = root->val;
+		root = root->right;
+	}
+	return true;
+}
 int main()
 {
 	vector<vector<int>>  vecVecInput1 = {{2}, {3,4}, {6,5,7}, {4,1,8,3}};

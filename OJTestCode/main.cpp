@@ -1582,6 +1582,33 @@ bool isValidBST(TreeNode* root) {
 	}
 	return true;
 }
+
+//221. 最大正方形
+//在一个由 0 和 1 组成的二维矩阵内，找到只包含 1 的最大正方形，并返回其面积。
+//动态规划
+int maximalSquare(vector<vector<char>>& matrix) {
+	int nMaxSide = 0;
+	if (matrix.empty() || matrix[0].empty()) return nMaxSide;
+
+	int nRow = matrix.size();
+	int nCol = matrix[0].size();
+
+	vector<vector<int>> vecVecDpInt(nRow, vector<int>(nCol, 0));
+	for (int i = 0; i < nRow; ++i)
+	{
+		for (int j = 0; j < nCol; ++j)
+		{
+			if (matrix[i][j] == '1')
+			{
+				if (i == 0 || j == 0) vecVecDpInt[i][j] = 1;
+				else vecVecDpInt[i][j] = min(min(vecVecDpInt[i - 1][j], vecVecDpInt[i - 1][j - 1]), vecVecDpInt[i][j - 1]) + 1;
+
+				nMaxSide = max(nMaxSide, vecVecDpInt[i][j]);
+			}
+		}
+	}
+	return nMaxSide;
+}
 int main()
 {
 	vector<vector<int>>  vecVecInput1 = {{2}, {3,4}, {6,5,7}, {4,1,8,3}};
